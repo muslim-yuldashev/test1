@@ -1,0 +1,19 @@
+name: native-build
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm-community'
+      - run: javac src/Practise1/Test1.java
+      - run: native-image -cp src -o test1 Practise1.Test1
+      - run: ./test1.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test1-windows
+          path: test1.exe
